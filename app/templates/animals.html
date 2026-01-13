@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>🐄 Gestión de Animales</h2>
+
+<h3>➕ Nuevo animal</h3>
+
+<form method="post" action="/animals/create">
+    <input name="species" placeholder="Especie" required>
+    <input name="breed" placeholder="Raza">
+    
+    <select name="sex">
+        <option value="">Sexo</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+    </select>
+    <input type="number" name="quantity" placeholder="Cantidad" required>
+    <button type="submit">Crear</button>
+</form>
+
+<hr>
+
+<h3>📋 Animales</h3>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Especie</th>
+        <th>Raza</th>
+        <th>Sexo</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for a in animals %}
+    <tr>
+        <form method="post" action="/animals/{{ a.id }}/edit">
+            <td>{{ a.id }}</td>
+            <td><input name="species" value="{{ a.species }}"></td>
+            <td><input name="breed" value="{{ a.breed }}"></td>
+            <td>
+                <select name="sex">
+                    <option value="">-</option>
+                    <option value="M" {% if a.sex == "M" %}selected{% endif %}>M</option>
+                    <option value="F" {% if a.sex == "F" %}selected{% endif %}>F</option>
+                </select>
+            </td>
+            <td><input type="number" name="quantity" value="{{ a.quantity }}"></td>
+            <td>
+                <button type="submit">💾</button>
+        </form>
+
+        <form method="post" action="/animals/{{ a.id }}/delete" style="display:inline">
+            <button type="submit">🗑️</button>
+        </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

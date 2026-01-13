@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #e5e7eb;
+}
+
+.navbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.navbar button {
+    background: #2e7d32;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.navbar button:hover {
+    background: #1b5e20;
+}
+
+.navbar .logout {
+    background: #c62828;
+}
+
+.navbar .logout:hover {
+    background: #8e0000;
+}
+
+.navbar button.active {
+    background: #1565c0;
+}
+
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.card {
+    background: #1f2933;
+    padding: 1rem;
+    border-radius: 8px;
+    color: white;
+}
+
+.value {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.alert {
+    color: red;
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+
+.ok {
+    color: #4caf50;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.7rem 1.2rem;
+    background: #2563eb;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.btn:hover {
+    background: #1e40af;
+}
+
+.badge {
+    background: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 7px;
+    font-size: 12px;
+    margin-left: 6px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+
+

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>📊 Estado actual del sistema</h2>
+
+<div class="cards">
+
+    <div class="card">
+        <h3>🌡️ Temperatura</h3>
+        <p class="value" id="temp">{{ last.temperature }} °C</p>
+    </div>
+
+    <div class="card">
+        <h3>💧 Humedad</h3>
+        <p class="value" id="hum">{{ last.humidity }} %</p>
+    </div>
+
+    <div class="card">
+        <h3>🚰 Nivel de agua</h3>
+        <p class="value" id="water">{{ last.water_distance }} cm</p>
+        <p id="water-status">
+        {% if last.water_low %}
+            🔴 Bajo
+        {% else %}
+            🟢 OK
+        {% endif %}
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>🕒 Última lectura</h3>
+        <p id="timestamp">{{ last.timestamp }}</p>
+    </div>
+
+</div>
+
+<h3>📈 Últimas lecturas</h3>
+<canvas id="sparkline" height="80"></canvas>
+
+<hr>
+
+
+<div class="alerts hidden" id="water-alert">
+    <h3>⚠️ Alertas</h3>
+    <ul>
+        <li>🔴 Nivel de agua bajo</li>
+    </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<hr>
+
+<script>
+async function refreshDashboard() {
+    try {
+        const res = await fetch("/telemetry/last");
+        if (!res.ok) return;
+
+        const data = await res.json();
+        if (!data || data.temperature === undefined) return;
+
+        document.getElementById("temp").innerText =
+            `${data.temperature} °C`;
+        document.getElementById("hum").innerText =
+            `${data.humidity} %`;
+        document.getElementById("water").innerText =
+            `${data.water_distance} cm`;
+        document.getElementById("timestamp").innerText =
+            data.timestamp;
+
+        const status = document.getElementById("water-status");
+        const badge = document.getElementById("water-badge");
+        const alertBox = document.getElementById("water-alert");
+
+        if (data.water_low === true) {
+            status.innerText = "🔴 Bajo";
+            status.className = "alert";
+            badge?.classList.remove("hidden");
+            alertBox.classList.remove("hidden");
+        } else {
+            status.innerText = "🟢 OK";
+            status.className = "ok";
+            badge?.classList.add("hidden");
+            alertBox.classList.add("hidden");
+        }
+
+    } catch (e) {
+        console.error("Error actualizando dashboard", e);
+    }
+}
+
+setInterval(refreshDashboard, 5000);
+refreshDashboard();
+</script>
+
+
+<script>
+let chart;
+
+async function loadSparkline() {
+    const res = await fetch("/telemetry/last-n?limit=20");
+    const data = await res.json();
+
+    const labels = data.map(r => r.timestamp);
+    const water = data.map(r => r.water_distance);
+
+    const ctx = document.getElementById("sparkline");
+
+    if (chart) {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = water;
+        chart.update();
+        return;
+    }
+
+    chart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels,
+            datasets: [{
+                label: "Nivel de agua (cm)",
+                data: water,
+                tension: 0.4,
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                x: { display: false },
+                y: {
+                    beginAtZero: false,
+                    reverse: true   // 👈 OPCIONAL: visualmente más lógico para tanques
+                }
+            }
+        }
+    });
+}
+
+loadSparkline();
+setInterval(loadSparkline, 10000);
+</script>
+
+{% endblock %}
+
+
+

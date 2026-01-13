@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartFarm | Login</title>
+    <link rel="stylesheet" href="/static/css/login.css">
+</head>
+<body>
+
+<div class="overlay">
+    <div class="login-card">
+        <h1>🌱 SmartFarm</h1>
+        <p class="subtitle">
+            Plataforma de monitoreo y gestión agropecuaria
+        </p>
+
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Contraseña" required>
+            <button type="submit">Ingresar</button>
+        </form>
+
+        <p id="error" class="error"></p>
+    </div>
+</div>
+
+<script>
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const formData = new URLSearchParams();
+    formData.append("username", email);
+    formData.append("password", password);
+    try {
+        const res = await fetch("/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: formData
+        });
+        if (!res.ok) {
+            throw new Error("Credenciales incorrectas");
+        }
+
+        const data = await res.json();
+        localStorage.setItem("access_token", data.access_token);
+        // 🔀 redirección por rol
+        switch (data.role) {
+            case "admin":
+                window.location.href = "/telemetry/dashboard";
+                break;
+            case "tecnico":
+                window.location.href = "/telemetry/view";
+                break;
+            case "operario":
+                window.location.href = "/animals/view";
+                break;
+            default:
+                window.location.href = "/";
+        }
+
+    } catch (err) {
+        document.getElementById("error").innerText = err.message;
+    }
+});
+</script>
+
+</body>
+</html>

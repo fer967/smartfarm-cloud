@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title or "SmartFarm" }}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+<header>
+    <h1>🌱 SmartFarm</h1>
+    {% if user %}
+
+    <nav class="navbar">
+
+    {% if user.role == "admin" %}
+        <button onclick="location.href='/telemetry/dashboard'"
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            📊 Dashboard
+            <span id="water-badge" class="badge hidden">!</span>
+        </button>
+
+        <button onclick="location.href='/telemetry/view'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            📈 Histórico sensores
+        </button>
+
+        <button onclick="location.href='/animals/view'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            🐄 Animales
+        </button>
+
+        <button onclick="location.href='/users'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            👥 Usuarios
+        </button>
+    {% endif %}
+
+    {% if user.role == "tecnico" %}
+        <button onclick="location.href='/telemetry/dashboard'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            📊 Dashboard
+            <span id="water-badge" class="badge hidden">!</span>
+        </button>
+
+        <button onclick="location.href='/telemetry/view'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            📈 Histórico sensores
+        </button>
+    {% endif %}
+
+    {% if user.role == "operario" %}
+        <button onclick="location.href='/animals/view'" 
+        class="{% if request.url.path == '/telemetry/dashboard' %}active{% endif %}">
+            🐄 Animales
+        </button>
+    {% endif %}
+
+    <button class="logout" onclick="location.href='/auth/logout'">
+        🚪 Salir
+    </button>
+
+    </nav>
+
+    {% endif %}
+
+    <hr>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

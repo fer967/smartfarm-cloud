@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>⏱️ Telemetría en tiempo real</h2>
+
+<div id="card">
+    <p>🌡️ Temperatura: <span id="temp">--</span> °C</p>
+    <p>💧 Humedad: <span id="hum">--</span> %</p>
+    <p>📏 Nivel agua: <span id="dist">--</span> cm</p>
+    <p>📟 Dispositivo: <span id="dev">--</span></p>
+    <p>🕒 Última lectura: <span id="time">--</span></p>
+
+    <hr>
+
+    <p id="water-alert" class="ok">
+        🟢 Nivel de agua OK
+    </p>
+</div>
+
+<script>
+async function loadTelemetry() {
+    try {
+        const res = await fetch("/telemetry/latest");
+        const data = await res.json();
+        document.getElementById("temp").innerText = data.temperature ?? "--";
+        document.getElementById("hum").innerText = data.humidity ?? "--";
+        document.getElementById("dist").innerText = data.water_distance ?? "--";
+        document.getElementById("dev").innerText = data.device_id ?? "--";
+        document.getElementById("time").innerText = data.timestamp ?? "--";
+        const alertEl = document.getElementById("water-alert");
+        if (data.water_low === true) {
+            alertEl.innerText = "🔴 ALERTA: Nivel de agua bajo";
+            alertEl.className = "alert";
+        } else {
+            alertEl.innerText = "🟢 Nivel de agua OK";
+            alertEl.className = "ok";
+        }
+    } catch (err) {
+        console.error("Error loading telemetry", err);
+    }
+}
+
+setInterval(loadTelemetry, 3000);
+loadTelemetry();
+</script>
+
+{% endblock %}
+
+
+
+
+
+

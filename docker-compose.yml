@@ -1,0 +1,83 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7
+    container_name: redis-smartfarm
+    ports:
+      - "6379:6379"
+
+  mongo:
+    image: mongo:6
+    container_name: mongo-smartfarm
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: smartfarm
+      MYSQL_USER: smartfarm
+      MYSQL_PASSWORD: smartfarm
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    container_name: worker-smartfarm
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    command: python -u -m worker.telemetry_worker
+    depends_on:
+      - redis
+      - mongo
+    environment:
+      REDIS_HOST: redis
+      MONGO_URI: mongodb://mongo:27017/smartfarm
+    restart: unless-stopped
+
+  api:
+    container_name: fastapi-smartfarm
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      REDIS_HOST: redis
+      DEVICE_API_KEY: esp32-secret-key
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: smartfarm
+      MYSQL_PASSWORD: smartfarm
+      MYSQL_DB: smartfarm
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    env_file:
+      - .env
+
+volumes:
+  mongo_data:
+  mysql_data:
+
+
+
+
+

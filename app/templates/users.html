@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>👥 Gestión de Usuarios</h2>
+
+<h3>➕ Nuevo usuario</h3>
+
+<form method="post" action="/users/create">
+    <input name="username" placeholder="Usuario" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Contraseña" required>
+
+    <select name="role">
+        <option value="operario">Operario</option>
+        <option value="tecnico">Técnico</option>
+        <option value="admin">Admin</option>
+    </select>
+
+    <button type="submit">Crear</button>
+</form>
+
+<hr>
+
+<h3>📋 Usuarios</h3>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for u in users %}
+
+    <tr>
+    <td>{{ u.id }}</td>
+
+    <td>
+        <form method="post" action="/users/{{ u.id }}/edit">
+            <input name="username" value="{{ u.username }}">
+    </td>
+
+    <td>
+            <input name="email" value="{{ u.email }}">
+    </td>
+
+    <td>
+            <select name="role">
+                <option value="admin" {% if u.role == "admin" %}selected{% endif %}>Admin</option>
+                <option value="tecnico" {% if u.role == "tecnico" %}selected{% endif %}>Técnico</option>
+                <option value="operario" {% if u.role == "operario" %}selected{% endif %}>Operario</option>
+            </select>
+    </td>
+
+    <td>
+            <button type="submit">💾</button>
+        </form>
+
+        <form method="post" action="/users/{{ u.id }}/delete" style="display:inline">
+            <button type="submit">🗑️</button>
+        </form>
+    </td>
+</tr>
+
+
+    {% endfor %}
+</table>
+
+{% endblock %}
+
+
+
+
