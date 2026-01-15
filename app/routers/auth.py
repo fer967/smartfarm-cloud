@@ -48,11 +48,21 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
-    # Swagger manda "username" → lo usamos como email
     user = db.query(User).filter(
         User.email == form_data.username
     ).first()
-    if not user or not verify_password(
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email o contraseña incorrectos"
+        )
+
+    # 👇 DEBUG (TEMPORAL)
+    print("PLAIN:", form_data.password)
+    print("HASH:", user.password_hash)
+
+    if not verify_password(
         form_data.password,
         user.password_hash
     ):
@@ -60,8 +70,6 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos"
         )
-    print("PLAIN:", form_data.password)
-    print("HASH:", user.password_hash)
 
     access_token = create_access_token(
         data={
@@ -69,14 +77,14 @@ def login(
             "role": user.role
         }
     )
-    # 🍪 Cookie para vistas HTML
+
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
         samesite="lax"
     )
-    # 🔁 Swagger / API
+
     return {
         "access_token": access_token,
         "token_type": "bearer",
