@@ -10,6 +10,7 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from app.core.logging_config import setup_logging
 from app.core.limiter import limiter
+import os
 
 app = FastAPI(
     title="SmartFarm API",
@@ -32,7 +33,8 @@ def rate_limit_handler(request, exc):
 
 @app.on_event("startup")
 def on_startup():
-    Base.metadata.create_all(bind=engine)
+    if os.getenv("ENV") != "production":
+        Base.metadata.create_all(bind=engine)
 
 templates = Jinja2Templates(directory="app/templates")
 
