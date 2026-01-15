@@ -11,6 +11,9 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.core.logging_config import setup_logging
 from app.core.limiter import limiter
 import os
+from app.db.mysql import SessionLocal
+from app.models.user import User
+from app.core.security import hash_password
 
 app = FastAPI(
     title="SmartFarm API",
@@ -35,6 +38,30 @@ def rate_limit_handler(request, exc):
 def on_startup():
     if os.getenv("ENV") != "production":
         Base.metadata.create_all(bind=engine)
+    create_admin_if_not_exists()
+
+def create_admin_if_not_exists():
+    db = SessionLocal()
+    try:
+        admin = db.query(User).filter(
+            User.email == "admin@smartfarm.com"
+        ).first()
+        if not admin:
+            admin = User(
+                username="admin",
+                email="admin@smartfarm.com",
+                password_hash=hash_password("admin123"),
+                role="admin"
+            )
+            db.add(admin)
+            db.commit()
+            print("✅ Admin creado")
+        else:
+            print("ℹ️ Admin ya existe")
+    finally:
+        db.close()
+
+
 
 templates = Jinja2Templates(directory="app/templates")
 
