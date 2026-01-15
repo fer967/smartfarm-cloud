@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException, Depends, BackgroundTasks
-from app.db.mongo import sensor_readings, dead_letters 
+from app.db.mongo import get_sensor_readings, get_dead_letters 
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.dependencies.roles import require_tecnico, require_admin
@@ -23,7 +23,8 @@ def ingest(data: dict, bg: BackgroundTasks):
     return {"status": "accepted"}
 
 @router.get("/sensor-readings")
-def list_sensor_readings(limit: int = 50, user=Depends(require_tecnico)):   
+def list_sensor_readings(limit: int = 50, user=Depends(require_tecnico)):
+    sensor_readings = get_sensor_readings()   
     cursor = (
         sensor_readings
         .find()
@@ -36,8 +37,8 @@ def list_sensor_readings(limit: int = 50, user=Depends(require_tecnico)):
 @router.get("/view", response_class=HTMLResponse)
 def telemetry_view(
     request: Request,
-    user=Depends(require_tecnico)
-):
+    user=Depends(require_tecnico)):
+    sensor_readings = get_sensor_readings()
     cursor = (
         sensor_readings
         .find()
@@ -61,12 +62,11 @@ def telemetry_view(
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard(
     request: Request,
-    user=Depends(require_tecnico)
-):
-    last = sensor_readings.find_one(sort=[("_id", -1)])
+    user=Depends(require_tecnico)):
+    
+    last = get_sensor_readings.find_one(sort=[("_id", -1)])
     if last:
         last["_id"] = str(last["_id"])
-
     return templates.TemplateResponse(
         "dashboard.html",
         {
@@ -79,7 +79,7 @@ def dashboard(
 
 @router.get("/latest", tags=["Telemetry"])
 def latest_telemetry(user=Depends(require_tecnico)):    
-    last = sensor_readings.find_one(sort=[("_id", -1)])
+    last = get_sensor_readings.find_one(sort=[("_id", -1)])
     if not last:
         return {
             "device_id": None,
@@ -112,7 +112,7 @@ def get_last_reading(
     request: Request,
     user=Depends(require_tecnico)
 ):
-    last = sensor_readings.find_one(sort=[("_id", -1)])
+    last = get_sensor_readings.find_one(sort=[("_id", -1)])
     if not last:
         return {}
     last["_id"] = str(last["_id"])
@@ -122,8 +122,8 @@ def get_last_reading(
 @router.get("/last-n")
 def last_n_readings(
     limit: int = 20,
-    user=Depends(require_tecnico)
-):
+    user=Depends(require_tecnico)):
+    sensor_readings = get_sensor_readings
     readings = list(
         sensor_readings
         .find()
@@ -145,7 +145,7 @@ def health():
 
 @router.get("/dead-letters")                       
 def list_dead_letters(user=Depends(require_admin)):
-    cursor = dead_letters.find().sort("timestamp", -1).limit(50)
+    cursor = get_dead_letters.find().sort("timestamp", -1).limit(50)
     return [{**d, "_id": str(d["_id"])} for d in cursor]
 
 
