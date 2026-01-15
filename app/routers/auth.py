@@ -60,6 +60,9 @@ def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email o contraseña incorrectos"
         )
+    print("PLAIN:", form_data.password)
+    print("HASH:", user.password_hash)
+
     access_token = create_access_token(
         data={
             "sub": str(user.id),
