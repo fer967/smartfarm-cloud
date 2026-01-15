@@ -1,4 +1,4 @@
-from app.db.mongo import sensor_readings, dead_letters
+from app.db.mongo import get_sensor_readings, get_dead_letters
 from datetime import datetime
 import logging
 
@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def process_telemetry(data: dict):
     try:
-        sensor_readings.insert_one({
+        get_sensor_readings.insert_one({
             **data,
             "processed_at": datetime.utcnow()
         })
@@ -15,7 +15,7 @@ def process_telemetry(data: dict):
             logger.warning("WATER_LOW", extra=data)
 
     except Exception as e:
-        dead_letters.insert_one({
+        get_dead_letters.insert_one({
             "payload": data,
             "error": str(e),
             "timestamp": datetime.utcnow()

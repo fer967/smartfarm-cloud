@@ -1,29 +1,27 @@
 import json
 import redis
-from pymongo import MongoClient
 import os
+from worker.db.mongo import get_sensor_collection
 
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
-MONGO_URI = os.getenv("MONGO_URI")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
-STREAM_NAME = "telemetry-events"
-GROUP_NAME = "telemetry_group"
-CONSUMER_NAME = "worker-1"
+STREAM_NAME = os.getenv("STREAM_NAME", "telemetry-events")
+GROUP_NAME = os.getenv("CONSUMER_GROUP", "telemetry-workers")
+CONSUMER_NAME = os.getenv("CONSUMER_NAME", "worker-1")
+
 
 def main():
     print("🚀 Telemetry worker starting...")
     print(f"🔌 Redis host: {REDIS_HOST}")
-    print(f"🗄️ Mongo URI: {MONGO_URI}")
 
     redis_client = redis.Redis(
         host=REDIS_HOST,
-        port=6379,
+        port=REDIS_PORT,
         decode_responses=True
     )
 
-    mongo_client = MongoClient(MONGO_URI)
-    db = mongo_client.get_default_database()
-    sensor_collection = db.sensor_readings
+    sensor_collection = get_sensor_collection()
 
     # Crear consumer group si no existe
     try:
@@ -57,10 +55,8 @@ def main():
         for _, entries in messages:
             for message_id, fields in entries:
                 payload = json.loads(fields["payload"])
-
                 sensor_collection.insert_one(payload)
                 redis_client.xack(STREAM_NAME, GROUP_NAME, message_id)
-
                 print(f"📥 Consumed {message_id} → MongoDB")
 
 
