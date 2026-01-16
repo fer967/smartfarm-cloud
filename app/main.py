@@ -36,9 +36,9 @@ def rate_limit_handler(request, exc):
 
 @app.on_event("startup")
 def on_startup():
-    if os.getenv("ENV") != "production":
+    # if os.getenv("ENV") != "production":      saco para crear tabla animals en produccion
         Base.metadata.create_all(bind=engine)
-    create_admin_if_not_exists()
+        create_admin_if_not_exists()
 
 def create_admin_if_not_exists():
     db = SessionLocal()
