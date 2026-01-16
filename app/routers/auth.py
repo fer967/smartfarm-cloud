@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Response
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from app.db.mysql import get_db
+from app.db.database import get_db
 from app.models.user import User
 from app.schemas.user import UserCreate, UserOut
 from app.core.security import (

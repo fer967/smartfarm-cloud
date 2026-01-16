@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
-from app.db.mysql import engine, Base
+from app.db.database import engine, Base
 from app.routers import telemetry, animals, auth, ingest, user
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -11,7 +11,7 @@ from slowapi.middleware import SlowAPIMiddleware
 from app.core.logging_config import setup_logging
 from app.core.limiter import limiter
 import os
-from app.db.mysql import SessionLocal
+from app.db.database import SessionLocal
 from app.models.user import User
 from app.core.security import hash_password
 

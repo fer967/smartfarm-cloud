@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
-from app.db.mysql import Base
+from app.db.database import Base
 
 class Animal(Base):
     __tablename__ = "animals"

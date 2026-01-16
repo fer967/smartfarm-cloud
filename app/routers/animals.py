@@ -4,7 +4,7 @@ from fastapi import (
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 
-from app.db.mysql import get_db
+from app.db.database import get_db
 from app.models.animal import Animal
 from app.dependencies.roles import require_operario
 from fastapi.templating import Jinja2Templates

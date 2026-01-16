@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
-from app.db.mysql import get_db
+from app.db.database import get_db
 from app.models.user import User
-# from app.schemas.user import UserCreate, UserUpdate
 from app.core.security import hash_password
 from app.dependencies.roles import require_admin
 from fastapi.templating import Jinja2Templates
