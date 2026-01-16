@@ -62,9 +62,10 @@ def telemetry_view(
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard(
     request: Request,
-    user=Depends(require_tecnico)):
-    
-    last = get_sensor_readings.find_one(sort=[("_id", -1)])
+    user=Depends(require_tecnico)
+):
+    sensor_readings = get_sensor_readings()
+    last = sensor_readings.find_one(sort=[("_id", -1)])
     if last:
         last["_id"] = str(last["_id"])
     return templates.TemplateResponse(
@@ -79,7 +80,8 @@ def dashboard(
 
 @router.get("/latest", tags=["Telemetry"])
 def latest_telemetry(user=Depends(require_tecnico)):    
-    last = get_sensor_readings.find_one(sort=[("_id", -1)])
+    sensor_readings = get_sensor_readings()
+    last = sensor_readings.find_one(sort=[("_id", -1)])
     if not last:
         return {
             "device_id": None,
@@ -112,7 +114,8 @@ def get_last_reading(
     request: Request,
     user=Depends(require_tecnico)
 ):
-    last = get_sensor_readings.find_one(sort=[("_id", -1)])
+    sensor_readings = get_sensor_readings()
+    last = sensor_readings.find_one(sort=[("_id", -1)])
     if not last:
         return {}
     last["_id"] = str(last["_id"])
@@ -123,7 +126,7 @@ def get_last_reading(
 def last_n_readings(
     limit: int = 20,
     user=Depends(require_tecnico)):
-    sensor_readings = get_sensor_readings
+    sensor_readings = get_sensor_readings()
     readings = list(
         sensor_readings
         .find()
@@ -145,7 +148,7 @@ def health():
 
 @router.get("/dead-letters")                       
 def list_dead_letters(user=Depends(require_admin)):
-    cursor = get_dead_letters.find().sort("timestamp", -1).limit(50)
+    cursor = get_dead_letters().find().sort("timestamp", -1).limit(50)
     return [{**d, "_id": str(d["_id"])} for d in cursor]
 
 
