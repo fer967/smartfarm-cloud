@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, TIMESTAMP, text
+from sqlalchemy import Column, Integer, String, TIMESTAMP, text
 from app.db.database import Base
 
 class Animal(Base):
@@ -7,9 +7,10 @@ class Animal(Base):
     id = Column(Integer, primary_key=True, index=True)
     species = Column(String(50), nullable=False)
     breed = Column(String(50))
-    sex = Column(Enum("M", "F"))
+    sex = Column(String(1))  # "M" o "F"
     quantity = Column(Integer, nullable=False)
     created_at = Column(
         TIMESTAMP,
         server_default=text("CURRENT_TIMESTAMP")
     )
+

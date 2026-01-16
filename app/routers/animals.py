@@ -16,7 +16,6 @@ router = APIRouter(
 
 templates = Jinja2Templates(directory="app/templates")
 
-
 # 📄 Vista principal
 @router.get("/view", response_class=HTMLResponse)
 def animals_view(
