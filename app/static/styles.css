@@ -13,6 +13,7 @@ body {
 
 @media (max-width: 768px) {
     .navbar {
+        max-width: 100%;
         justify-content: space-between;
         padding: 0 10px;
     }

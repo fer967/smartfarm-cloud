@@ -24,17 +24,16 @@
 
 <h3>📋 Usuarios</h3>
 
-<div class="table-wrapper">
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Usuario</th>
-            <th>Email</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-        </tr>
-        {% for u in users %}
-        <tr>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+    </tr>
+    {% for u in users %}
+    <tr>
         <td>{{ u.id }}</td>
         <td>
             <form method="post" action="/users/{{ u.id }}/edit">
@@ -58,9 +57,10 @@
             </form>
         </td>
     </tr>
-        {% endfor %}
-    </table>
-</div>
+    {% endfor %}
+</table>
+
+
 {% endblock %}
 
 

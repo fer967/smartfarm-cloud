@@ -23,40 +23,38 @@
 
 <h3>📋 Animales</h3>
 
-<div class="table-wrapper">
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Especie</th>
-            <th>Raza</th>
-            <th>Sexo</th>
-            <th>Cantidad</th>
-            <th>Acciones</th>
-        </tr>
-        {% for a in animals %}
-        <tr>
-            <form method="post" action="/animals/{{ a.id }}/edit">
-                <td>{{ a.id }}</td>
-                <td><input name="species" value="{{ a.species }}"></td>
-                <td><input name="breed" value="{{ a.breed }}"></td>
-                <td>
-                    <select name="sex">
-                        <option value="">-</option>
-                        <option value="M" {% if a.sex == "M" %}selected{% endif %}>M</option>
-                        <option value="F" {% if a.sex == "F" %}selected{% endif %}>F</option>
-                    </select>
-                </td>
-                <td><input type="number" name="quantity" value="{{ a.quantity }}"></td>
-                <td>
-                    <button type="submit" class="button-update">actualizar</button>
-            </form>
-            <form method="post" action="/animals/{{ a.id }}/delete" style="display:inline">
-                <button type="submit" class="button-delete">eliminar</button>
-            </form>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Especie</th>
+        <th>Raza</th>
+        <th>Sexo</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+    </tr>
+    {% for a in animals %}
+    <tr>
+        <form method="post" action="/animals/{{ a.id }}/edit">
+            <td>{{ a.id }}</td>
+            <td><input name="species" value="{{ a.species }}"></td>
+            <td><input name="breed" value="{{ a.breed }}"></td>
+            <td>
+                <select name="sex">
+                    <option value="">-</option>
+                    <option value="M" {% if a.sex == "M" %}selected{% endif %}>M</option>
+                    <option value="F" {% if a.sex == "F" %}selected{% endif %}>F</option>
+                </select>
             </td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+            <td><input type="number" name="quantity" value="{{ a.quantity }}"></td>
+            <td>
+                <button type="submit" class="button-update">actualizar</button>
+        </form>
+        <form method="post" action="/animals/{{ a.id }}/delete" style="display:inline">
+            <button type="submit" class="button-delete">eliminar</button>
+        </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
