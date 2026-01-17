@@ -8,8 +8,20 @@ body {
     display: flex;
     gap: 10px;
     align-items: center;
+    
     background-color: #0E1117;
 }
+
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: space-between;
+    }
+
+    .navbar-links {
+        display: none; /* luego lo podés convertir en menú */
+    }
+}
+
 
 .navbar button {
     background: #1565c0;
@@ -137,4 +149,9 @@ th, td {
     padding: 5px 8px;   /* 👈 separación interna */
     text-align: left;
 }
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
 

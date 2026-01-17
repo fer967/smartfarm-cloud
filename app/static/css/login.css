@@ -20,13 +20,19 @@ body {
 .login-card {
     background: #ffffff;
     padding: 40px;
-    width: 360px;
+    max-width: 30%;
+    max-height: 30%;
     border-radius: 10px;
     text-align: center;
 }
 
 .login-card h1 {
     margin-bottom: 10px;
+}
+
+.login-form {
+    margin-top: 20px;
+    text-align: left;
 }
 
 .subtitle {
