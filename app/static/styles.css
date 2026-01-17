@@ -48,6 +48,10 @@ body {
     background-color: #4caf50;
 }
 
+.button-creat {
+    background-color: #2563eb;
+}
+
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -130,7 +134,7 @@ table {
 }
 
 th, td {
-    padding: 10px 16px;   /* 👈 separación interna */
+    padding: 5px 8px;   /* 👈 separación interna */
     text-align: left;
 }
 
