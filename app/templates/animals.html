@@ -48,11 +48,11 @@
             </td>
             <td><input type="number" name="quantity" value="{{ a.quantity }}"></td>
             <td>
-                <button type="submit">actualizar</button>
+                <button type="submit" class="button-update">actualizar</button>
         </form>
 
         <form method="post" action="/animals/{{ a.id }}/delete" style="display:inline">
-            <button type="submit" class="button">eliminar</button>
+            <button type="submit" class="button-delete">eliminar</button>
         </form>
         </td>
     </tr>

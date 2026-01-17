@@ -12,7 +12,7 @@ body {
 }
 
 .navbar button {
-    background: #2e7d32;
+    background: #1565c0;
     color: white;
     border: none;
     padding: 8px 14px;
@@ -40,8 +40,12 @@ body {
     background: #1565c0;
 }
 
-.button {
+.button-delete {
     background-color: red;
+}
+
+.button-update {
+    background-color: #4caf50;
 }
 
 .cards {
@@ -118,5 +122,15 @@ body {
     height: 20px;
     animation: spin 1s linear infinite;
     display: inline-block;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px 16px;   /* 👈 separación interna */
+    text-align: left;
 }
 
