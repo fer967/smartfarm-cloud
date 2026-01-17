@@ -8,13 +8,13 @@ body {
     display: flex;
     gap: 10px;
     align-items: center;
-    
     background-color: #0E1117;
 }
 
 @media (max-width: 768px) {
     .navbar {
         justify-content: space-between;
+        padding: 0 10px;
     }
 
     .navbar-links {
