@@ -1,4 +1,3 @@
-#  8/1/2026
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional

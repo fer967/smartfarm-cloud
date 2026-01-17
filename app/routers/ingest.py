@@ -1,17 +1,14 @@
-#  endpoint de ingesta
-from fastapi import APIRouter, Header, HTTPException, status, Request
+from fastapi import APIRouter, Header, HTTPException
 from app.schemas.telemetry import TelemetryIn
 from app.core.redis import redis_client
 from datetime import datetime
 import os
 import json
-from fastapi.encoders import jsonable_encoder
 
 router = APIRouter(prefix="/ingest", tags=["Ingest"])
 
 STREAM_NAME = "telemetry-events"
 DEVICE_API_KEY = os.getenv("DEVICE_API_KEY")
-
 
 @router.post("/telemetry", status_code=202)
 def ingest_telemetry(

@@ -10,7 +10,6 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from app.core.logging_config import setup_logging
 from app.core.limiter import limiter
-import os
 from app.db.database import SessionLocal
 from app.models.user import User
 from app.core.security import hash_password
@@ -60,8 +59,6 @@ def create_admin_if_not_exists():
             print("ℹ️ Admin ya existe")
     finally:
         db.close()
-
-
 
 templates = Jinja2Templates(directory="app/templates")
 

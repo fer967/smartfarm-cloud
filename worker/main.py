@@ -27,7 +27,6 @@ STREAM_NAME= os.getenv("STREAM_NAME")
 CONSUMER_GROUP= os.getenv
 CONSUMER_NAME= os.getenv("CONSUMER_NAME")
 
-
 def create_group():
     while True:
         try:
