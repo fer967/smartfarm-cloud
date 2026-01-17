@@ -6,7 +6,7 @@ body {
 
 .navbar {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     align-items: center;
     background-color: #0E1117;
 }
@@ -147,12 +147,9 @@ table {
 }
 
 th, td {
-    padding: 5px 8px;   /* 👈 separación interna */
+    padding: 2px 4px;   /* 👈 separación interna */
     text-align: left;
 }
 
-.table-wrapper {
-    overflow-x: auto;
-}
 
 
