@@ -19,12 +19,21 @@ body {
 
 .login-card {
     background: #ffffff;
-    padding: 40px;
-    max-width: 60%;
-    max-height: 60%;
-    border-radius: 10px;
+    padding: 32px;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 12px;
     text-align: center;
+    margin: auto;
 }
+
+@media (max-width: 768px) {
+    .login-card {
+        padding: 24px;
+        max-width: 90%;
+    }
+}
+
 
 .login-card h1 {
     margin-bottom: 10px;

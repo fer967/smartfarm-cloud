@@ -141,15 +141,25 @@ body {
     display: inline-block;
 }
 
-/* table {
-    width: 100%;
-    border-collapse: collapse;
+.table-hint {
+    display: none;
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-bottom: 8px;
 }
 
-th, td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #2d3748;
-} */
+@media (max-width: 768px) {
+    .table-hint {
+        display: block;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
 
 
 
