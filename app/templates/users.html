@@ -21,6 +21,7 @@
 <hr>
 
 <h3>📋 Usuarios</h3>
+
 <div class="table-hint">
     👉 Deslizá la tabla hacia la derecha para ver todas las columnas
 </div>
@@ -36,32 +37,33 @@
         </tr>
         {% for u in users %}
         <tr>
-            <td>{{ u.id }}</td>
-            <td>
-                <form method="post" action="/users/{{ u.id }}/edit">
+            <form method="post" action="/users/{{ u.id }}/edit">
+                <td>{{ u.id }}</td>
+                <td>
                     <input name="username" value="{{ u.username }}">
-            </td>
-            <td>
+                </td>
+                <td>
                     <input name="email" value="{{ u.email }}">
-            </td>
-            <td>
-                <select name="role">
-                    <option value="admin" {% if u.role == "admin" %}selected{% endif %}>Admin</option>
-                    <option value="tecnico" {% if u.role == "tecnico" %}selected{% endif %}>Técnico</option>
-                    <option value="operario" {% if u.role == "operario" %}selected{% endif %}>Operario</option>
-                </select>
-            </td>
-            <td>
+                </td>
+                <td>
+                    <select name="role">
+                        <option value="admin" {% if u.role == "admin" %}selected{% endif %}>Admin</option>
+                        <option value="tecnico" {% if u.role == "tecnico" %}selected{% endif %}>Técnico</option>
+                        <option value="operario" {% if u.role == "operario" %}selected{% endif %}>Operario</option>
+                    </select>
+                </td>
+                <td>
                     <button type="submit" class="button-update">actualizar</button>
-                </form>
-                <form method="post" action="/users/{{ u.id }}/delete" style="display:inline">
-                    <button type="submit" class="button-delete">eliminar</button>
-                </form>
-            </td>
+            </form>
+            <form method="post" action="/users/{{ u.id }}/delete" style="display:inline">
+                <button type="submit" class="button-delete">eliminar</button>
+            </form>
+                </td>
         </tr>
         {% endfor %}
     </table>
 </div>
+
 {% endblock %}
 
 
