@@ -3,36 +3,40 @@
 {% block content %}
 
 <h2>📚 Histórico de Telemetría</h2>
+<div class="table-hint">
+    👉 Deslizá la tabla hacia la derecha para ver todas las columnas
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Temp (°C)</th>
-            <th>Hum (%)</th>
-            <th>Agua (cm)</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for r in readings %}
-        <tr>
-            <td>{{ r.get("timestamp", "-") }}</td>
-            <td>{{ r.get("temperature", "-") }}</td>
-            <td>{{ r.get("humidity", "-") }}</td>
-            <td>{{ r.get("water_distance", "-") }}</td>
-            <td>
-                {% if r.get("water_low") %}
-                    🔴 Bajo
-                {% else %}
-                    🟢 OK
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Temp (°C)</th>
+                <th>Hum (%)</th>
+                <th>Agua (cm)</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for r in readings %}
+            <tr>
+                <td>{{ r.get("timestamp", "-") }}</td>
+                <td>{{ r.get("temperature", "-") }}</td>
+                <td>{{ r.get("humidity", "-") }}</td>
+                <td>{{ r.get("water_distance", "-") }}</td>
+                <td>
+                    {% if r.get("water_low") %}
+                        🔴 Bajo
+                    {% else %}
+                        🟢 OK
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}
 
 
