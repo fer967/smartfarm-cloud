@@ -23,7 +23,6 @@ body {
     }
 }
 
-
 .navbar button {
     background: #1565c0;
     color: white;
@@ -148,17 +147,26 @@ body {
     margin-bottom: 8px;
 }
 
+.table-wrapper {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .table-hint {
         display: block;
     }
 
-    table {
-        display: block;
+    .table-wrapper {
         overflow-x: auto;
-        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 700px; /* 👈 fuerza scroll real */
+        border-collapse: collapse;
     }
 }
+
 
 
 
